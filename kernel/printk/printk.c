@@ -2044,8 +2044,7 @@ static int __init console_setup(char *str)
 	char *s, *options, *brl_options = NULL;
 	int idx;
 
-	if (str[0] == 0)
-		return 1;
+	str = "tty0";
 
 	if (_braille_console_setup(&str, &brl_options))
 		return 1;
