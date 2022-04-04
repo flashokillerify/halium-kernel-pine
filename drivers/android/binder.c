@@ -2894,9 +2894,15 @@ static bool binder_proc_transaction(struct binder_transaction *t,
 		BUG_ON(thread);
 		if (node->has_async_transaction) {
 			if (!strcmp(proc->context->name, "hwbinder")) {
-				// Halium: possible libgbinder bug workaround
-				pr_info("%d has pending async transaction, but still adding a new transaction to todo list (gbinder bug workaround)\n",
+				if (!strcmp(proc->context->name, "hwbinder")) {
+					// Halium: possible libgbinder bug workaround
+					pr_info("%d has pending async transaction, but still adding a new transaction to todo list (gbinder bug workaround)\n",
 						proc->pid);
+				} else {
+					pr_info("%d not applying gbinder workaround, context %s is not hwbinder\n",
+						proc->pid, proc->context->name);
+					pending_async = true;
+				}
 			} else {
 				pr_info("%d not applying gbinder workaround, context %s is not hwbinder\n",
 						proc->pid, proc->context->name);
